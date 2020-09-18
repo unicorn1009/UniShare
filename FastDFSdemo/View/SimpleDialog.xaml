@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="FastDFSdemo.View.SimpleDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FastDFSdemo.View"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
+             DataContext="{Binding Source={StaticResource Locator}, Path=Dialog}">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBox materialDesign:HintAssist.Hint="填写文件服务器IP" Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                 Margin="0 6 0 0"
+                 FontSize="18" Grid.Row="0" Text="{Binding Ip}" />
+        <TextBox materialDesign:HintAssist.Hint="填写数据库IP" Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                 Margin="0 6 0 0"
+                 FontSize="18" Grid.Row="1" Text="{Binding DatabaseServer}" />
+        <TextBox materialDesign:HintAssist.Hint="填写数据库名称" Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                 Margin="0 6 0 0"
+                 FontSize="18" Grid.Row="2" Text="{Binding DatabaseName}" />
+        <TextBox materialDesign:HintAssist.Hint="填写数据库用户名" Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                 Margin="0 6 0 0"
+                 FontSize="18" Grid.Row="3" Text="{Binding Username}" />
+        <TextBox materialDesign:HintAssist.Hint="填写数据库密码" Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                 Margin="0 6 0 0"
+                 FontSize="18" Grid.Row="4" Text="{Binding Password}" />
+        <StackPanel Orientation="Horizontal" Grid.Row="5"
+                    Margin="0 16 0 0">
+            <Button IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}"
+                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                <Button.CommandParameter>
+                    <system:Boolean>True</system:Boolean>
+                </Button.CommandParameter>
+                ACCEPT
+            </Button>
+            <Button IsCancel="True" Margin="8 0 0 0" Style="{DynamicResource MaterialDesignFlatButton}"
+                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                <Button.CommandParameter>
+                    <system:Boolean>False</system:Boolean>
+                </Button.CommandParameter>
+                CANCEL
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>
