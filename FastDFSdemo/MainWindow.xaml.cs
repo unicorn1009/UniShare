@@ -23,6 +23,18 @@ namespace FastDFSdemo
         public MainWindow()
         {
             InitializeComponent();
+            this.MyGrid.LoadingRow += new EventHandler<DataGridRowEventArgs>(this.DataGrid_LoadingRow);
+            
+        }
+
+        private void DataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = e.Row.GetIndex() + 1;
+        }
+
+        private void DataGrid_OnSelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            Console.WriteLine(MyGrid.SelectedIndex);
         }
     }
 }

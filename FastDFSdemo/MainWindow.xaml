@@ -67,6 +67,7 @@
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60" />
+                    <!-- <RowDefinition Height="*" /> -->
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <!-- 菜单条 -->
@@ -95,60 +96,11 @@
 
                     </StackPanel>
                 </Grid>
-                <ListView Grid.Row="1" x:Name="fList" ItemsSource="{Binding Files,Mode=TwoWay}" Margin="20 0 0 0"
-                          HorizontalAlignment="Stretch">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="序号" Width="40"
-                                            DisplayMemberBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Converter={StaticResource MyIndexConverter}}" />
-                            <GridViewColumn
-                                DisplayMemberBinding="{Binding FileName}"
-                                Header="文件名" />
-                            <GridViewColumn
-                                DisplayMemberBinding="{Binding FileSize}"
-                                Header="文件大小(KB)" />
-                            <GridViewColumn
-                                DisplayMemberBinding="{Binding FileType}"
-                                Header="文件类型" />
-                            <GridViewColumn
-                                DisplayMemberBinding="{Binding UploadTime}"
-                                Header="上传日期" />
-                            <GridViewColumn
-                                Header="操作">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button
-                                                Margin="10 0 10 0" Width="100"
-                                                Style="{StaticResource MaterialDesignOutlinedButton}"
-                                                ToolTip="下载"
-                                                Command="{Binding DataContext.DownloadCommand,ElementName=ThisWindow}"
-                                                Tag="{Binding FilePath}"
-                                                CommandParameter="{Binding Id}">
-                                                Download
-                                            </Button>
-                                            <Button
-                                                Margin="10 0 10 0" Width="100"
-                                                Style="{StaticResource MaterialDesignOutlinedButton}"
-                                                ToolTip="删除"
-                                                IsEnabled="True"
-                                                Tag="{Binding FilePath}"
-                                                Command="{Binding DataContext.DeleteCommand,ElementName=ThisWindow}"
-                                                CommandParameter="{Binding Id}">
-                                                Delete
-                                            </Button>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <!-- <ListView Grid.Row="1" x:Name="fList" ItemsSource="{Binding Files}" Margin="20 0 0 0" HorizontalAlignment="Stretch"> -->
+                <!-- <ListView Grid.Row="1" x:Name="fList" ItemsSource="{Binding Files}" Margin="20 0 0 0" -->
+                <!--           HorizontalAlignment="Stretch"> -->
                 <!--     <ListView.View> -->
                 <!--         <GridView> -->
-                <!--             <GridViewColumn Header="序号" Width="30" -->
+                <!--             <GridViewColumn Header="序号" Width="40" -->
                 <!--                             DisplayMemberBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Converter={StaticResource MyIndexConverter}}" /> -->
                 <!--             <GridViewColumn -->
                 <!--                 DisplayMemberBinding="{Binding FileName}" -->
@@ -172,16 +124,19 @@
                 <!--                                 Style="{StaticResource MaterialDesignOutlinedButton}" -->
                 <!--                                 ToolTip="下载" -->
                 <!--                                 Command="{Binding DataContext.DownloadCommand,ElementName=ThisWindow}" -->
-                <!--                                 CommandParameter="{Binding Id, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}" -->
-                <!--                                 Content="Download"> -->
+                <!--                                 Tag="{Binding FilePath}" -->
+                <!--                                 CommandParameter="{Binding Id}"> -->
+                <!--                                 Download -->
                 <!--                             </Button> -->
                 <!--                             <Button -->
                 <!--                                 Margin="10 0 10 0" Width="100" -->
                 <!--                                 Style="{StaticResource MaterialDesignOutlinedButton}" -->
                 <!--                                 ToolTip="删除" -->
                 <!--                                 IsEnabled="True" -->
-                <!--                                 Command="{Binding DeleteCommand}" -->
-                <!--                                 CommandParameter="{Binding Id, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}" Content="Delete"> -->
+                <!--                                 Tag="{Binding FilePath}" -->
+                <!--                                 Command="{Binding DataContext.DeleteCommand,ElementName=ThisWindow}" -->
+                <!--                                 CommandParameter="{Binding Id}"> -->
+                <!--                                 Delete -->
                 <!--                             </Button> -->
                 <!--                         </StackPanel> -->
                 <!--                     </DataTemplate> -->
@@ -191,6 +146,111 @@
                 <!--         </GridView> -->
                 <!--     </ListView.View> -->
                 <!-- </ListView> -->
+                <DataGrid Name="MyGrid" Grid.Row="1" ItemsSource="{Binding Files}"
+                          CanUserAddRows="False" Margin="30 0 0 0"
+                          CanUserReorderColumns="True"
+                          AlternatingRowBackground="#FDF5E6"
+                          RowHeight="50"
+                          FontSize="15" SelectionMode="Single" SelectedCellsChanged="DataGrid_OnSelectedCellsChanged"
+                          VerticalContentAlignment="Center"
+                          CanUserSortColumns="True"
+                          CanUserResizeColumns="True"
+                          AutoGenerateColumns="False" FontFamily="Segoe UI"
+                          HeadersVisibility="All">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Binding="{Binding FileName}"
+                            Header="文件名称" Width="350" IsReadOnly="True" >
+                        </DataGridTextColumn>
+                        <!-- set a max length to get an indicator in the editor -->
+                        <DataGridTextColumn Binding="{Binding FileSize}"
+                            Header="文件大小" IsReadOnly="True"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style
+                                    TargetType="{x:Type DataGridColumnHeader}"
+                                    BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                    <Setter
+                                        Property="HorizontalContentAlignment"
+                                        Value="Right" />
+                                </Style>
+                            </DataGridTextColumn.HeaderStyle>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style
+                                    TargetType="{x:Type TextBlock}"
+                                    BasedOn="{StaticResource MaterialDesignDataGridTextColumnStyle}">
+                                    <Setter
+                                        Property="HorizontalAlignment"
+                                        Value="Right" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <materialDesign:DataGridTextColumn IsReadOnly="True"
+                                                           Binding="{Binding FileType}"
+                                                           Header="文件类型"
+                                                           EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style
+                                    TargetType="{x:Type DataGridColumnHeader}"
+                                    BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                    <Setter
+                                        Property="HorizontalContentAlignment"
+                                        Value="Right" />
+                                </Style>
+                            </DataGridTextColumn.HeaderStyle>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style
+                                    TargetType="{x:Type TextBlock}"
+                                    BasedOn="{StaticResource MaterialDesignDataGridTextColumnStyle}">
+                                    <Setter
+                                        Property="HorizontalAlignment"
+                                        Value="Right" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </materialDesign:DataGridTextColumn>
+                        <materialDesign:DataGridTextColumn Binding="{Binding UploadTime}"
+                            Header="上传日期" Width="200" IsReadOnly="True"
+                            ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                            
+                        </materialDesign:DataGridTextColumn>
+                        <!-- use custom combo box column to get better combos. Use ItemsSourceBinding as your binding template to be applied to each combo -->
+                        <DataGridTemplateColumn Header="操作">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style
+                                    TargetType="{x:Type DataGridColumnHeader}"
+                                    BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                    <Setter
+                                        Property="HorizontalContentAlignment"
+                                        Value="Center" />
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button
+                                            Margin="10 0 10 0" Width="100"
+                                            Style="{StaticResource MaterialDesignRaisedLightButton}"
+                                            ToolTip="下载"
+                                            Command="{Binding DataContext.DownloadCommand,ElementName=ThisWindow}"
+                                            CommandParameter="{Binding Id}">
+                                            Download
+                                        </Button>
+                                        <Button
+                                            Margin="10 0 10 0" Width="100"
+                                            Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                            ToolTip="删除"
+                                            IsEnabled="True"
+                                            Command="{Binding DataContext.DeleteCommand,ElementName=ThisWindow}"
+                                            CommandParameter="{Binding Id}">
+                                            Delete
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
         </Grid>
 
